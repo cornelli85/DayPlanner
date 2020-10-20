@@ -1,7 +1,10 @@
 $(document).ready(function () {
 
-    // We write code here to display the current date and time to the element with id #current day
+    // We write code here to display the current date and time in the element with id #current day
     $("#currentDay").text(moment().format('MMMM Do YYYY, HH:mm:ss a'));
+
+    // We create a variable to store the items to be retrieved from local storage.
+    var plans = JSON.parse(localStorage.getItem("plans")) || [];
 
     //We create a function to compare the various time blocks with the current hour of the day.
     function compareHours() {
@@ -21,7 +24,7 @@ $(document).ready(function () {
 
 
 
-            //Create conditionals to assign classes to each time block by comparing the time of each time block to the current hour.
+            //Create conditionals to assign classes to time blocks by comparing the time of each time block to the current hour.
             if (hourRow < currentHour) {
                 $(this).addClass("past");
             }
@@ -40,18 +43,33 @@ $(document).ready(function () {
 
     compareHours();
 
-    $(".saveBtn").on("click", function() {
+    // We add the click event listener to the save buttons.
+    $(".saveBtn").on("click", function () {
+
+        // Make variables to store user's input.
         var event = $(this).siblings(".description").val();
 
         var timeRow = $(this).parent().attr("id");
 
-        localStorage.setItem(timeRow, event);
+        var savedPlans = {
+            text: event,
+            time: timeRow
+        };
 
-        
+        // This line of code pushes the savedPlans object into the plans variable declared earlier.
+        plans.push(savedPlans);
+
+
+        // Here we set the items to be saved in the local storage.
+        localStorage.setItem("plans", JSON.stringify(plans));
+
     });
 
-    var display = localStorage.getItem(timeRow);
+    for (let i = 0; i < plans.length; i++) {
+        let currentText = plans[i].text;
+        let currentTime = plans[i].time;
+        $(`#${currentTime}`).val(currentText);
+    }
 
-    $(".description").val(display);
 
 })
