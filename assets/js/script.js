@@ -6,6 +6,7 @@ $(document).ready(function () {
     // We create a variable to store the items to be retrieved from local storage.
     var plans = JSON.parse(localStorage.getItem("plans")) || [];
 
+
     //We create a function to compare the various time blocks with the current hour of the day.
     function compareHours() {
 
@@ -49,7 +50,9 @@ $(document).ready(function () {
         // Make variables to store user's input.
         var event = $(this).siblings(".description").val();
 
-        var timeRow = $(this).parent().attr("id");
+        var timeRow = $(this).siblings(".description").attr("id");
+
+        console.log(timeRow);
 
         var savedPlans = {
             text: event,
@@ -69,7 +72,8 @@ $(document).ready(function () {
         let currentText = plans[i].text;
         let currentTime = plans[i].time;
         $(`#${currentTime}`).val(currentText);
-    }
+        console.log(currentText);
+    };
 
 
-})
+});
